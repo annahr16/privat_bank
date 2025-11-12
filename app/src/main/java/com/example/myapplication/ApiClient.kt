@@ -1,4 +1,4 @@
-package com.example.myapplication
+package com.example.myapplication // <-- Правильний пакет
 
 import retrofit2.Retrofit
 import retrofit2.converter.gson.GsonConverterFactory
@@ -6,12 +6,10 @@ import retrofit2.converter.gson.GsonConverterFactory
 object ApiClient {
     private const val BASE_URL = "https://api.privatbank.ua/"
 
-    // Створюємо Retrofit
     private val retrofit: Retrofit = Retrofit.Builder()
         .baseUrl(BASE_URL)
-        .addConverterFactory(GsonConverterFactory.create()) // Використовуємо GSON
+        .addConverterFactory(GsonConverterFactory.create())
         .build()
 
-    // Створюємо сервіс (реалізацію нашого інтерфейсу)
     val service: PrivatApiService = retrofit.create(PrivatApiService::class.java)
 }

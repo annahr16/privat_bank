@@ -46,4 +46,15 @@ dependencies {
     testImplementation(libs.junit)
     androidTestImplementation(libs.androidx.junit)
     androidTestImplementation(libs.androidx.espresso.core)
+// Для ViewModel
+    implementation("androidx.lifecycle:lifecycle-viewmodel-ktx:2.8.3")
+    implementation("androidx.activity:activity-ktx:1.9.0")
+// Coroutines (для безпечних фонових завдань замість 'thread')
+    implementation("org.jetbrains.kotlinx:kotlinx-coroutines-android:1.7.3")
+// Retrofit (для легких API-запитів)
+    implementation("com.squareup.retrofit2:retrofit:2.9.0")
+    implementation("com.squareup.retrofit2:converter-gson:2.9.0")
+// Для парсингу JSON
+// GSON (конвертер)
+    implementation("com.google.code.gson:gson:2.10.1")
 }

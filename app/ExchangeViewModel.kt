@@ -6,8 +6,7 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import kotlinx.coroutines.launch
 
-// Клас для опису стану екрану (завантаження, успіх, помилка)
-// Це набагато краще, ніж керувати progressBar.visibility вручну
+
 sealed class RatesState {
     object Loading : RatesState() // Стан "завантаження"
     data class Success(val rates: List<CurrencyRate>) : RatesState() // Стан "успіх"

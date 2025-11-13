@@ -23,7 +23,6 @@ class CurrencyAdapter : ListAdapter<CurrencyRate, CurrencyAdapter.CurrencyViewHo
     }
 
     class CurrencyViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
-        // !!! Потрібно, щоб ID в 'item_currency.xml' збігалися
         private val currencyName: TextView = itemView.findViewById(R.id.tv_currency_name)
         private val currencySale: TextView = itemView.findViewById(R.id.tv_currency_sale)
         private val currencyPurchase: TextView = itemView.findViewById(R.id.tv_currency_purchase)

@@ -1,76 +1,81 @@
 package com.example.myapplication
-import com.example.myapplication.ExchangeViewModel
-import com.example.myapplication.CurrencyAdapter
-import com.example.myapplication.RatesState
 
-import com.example.myapplication.R
-
+import android.app.DatePickerDialog
 import android.os.Bundle
 import android.view.View
 import android.widget.Button
 import android.widget.ProgressBar
+import android.widget.TextView
 import android.widget.Toast
 import androidx.activity.viewModels
 import androidx.appcompat.app.AppCompatActivity
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
+import java.util.Calendar
 
 class MainActivity : AppCompatActivity() {
 
-    // Отримуємо ViewModel. Вона переживе переворот екрану
     private val viewModel: ExchangeViewModel by viewModels()
 
-    // Адаптер для списку
     private lateinit var currencyAdapter: CurrencyAdapter
 
-    // Елементи UI
     private lateinit var recyclerView: RecyclerView
     private lateinit var progressBar: ProgressBar
     private lateinit var loadButton: Button
+    private lateinit var pickDateButton: Button
+    private lateinit var selectedDateText: TextView
+
+    private var selectedDateString: String = ""
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
 
-        // Ініціалізуємо UI елементи (їх ID мають бути в activity_main.xml)
         recyclerView = findViewById(R.id.recycler_view_rates)
         progressBar = findViewById(R.id.progress_bar)
         loadButton = findViewById(R.id.button_load)
+        pickDateButton = findViewById(R.id.button_pick_date)
+        selectedDateText = findViewById(R.id.tv_selected_date)
 
-        // Налаштовуємо RecyclerView
         setupRecyclerView()
 
-        // 1. Встановлюємо слухач на кнопку
-        loadButton.setOnClickListener {
-            // TODO: Тут ти маєш брати дату з DatePicker або EditText
-            val selectedDate = "01.12.2014" // Поки що "захардкодимо" для тесту
-            viewModel.fetchRates(selectedDate)
+        pickDateButton.setOnClickListener {
+            showDatePickerDialog()
         }
 
-        // 2. ПІДПИСУЄМОСЬ на зміни стану у ViewModel
-        // Це серце MVVM. Цей код автоматично реагує на зміни даних.
+        loadButton.setOnClickListener {
+            if (selectedDateString.isEmpty()) {
+                Toast.makeText(this, "Будь ласка, оберіть дату", Toast.LENGTH_SHORT).show()
+            } else {
+                viewModel.fetchRates(selectedDateString)
+            }
+        }
+
         viewModel.ratesState.observe(this) { state ->
             when (state) {
                 is RatesState.Loading -> {
-                    // Йде завантаження
                     progressBar.visibility = View.VISIBLE
                     recyclerView.visibility = View.GONE
-                    loadButton.isEnabled = false // Блокуємо кнопку
+                    loadButton.isEnabled = false
+                    pickDateButton.isEnabled = false
                 }
                 is RatesState.Success -> {
-                    // Успіх!
                     progressBar.visibility = View.GONE
                     recyclerView.visibility = View.VISIBLE
                     loadButton.isEnabled = true
-                    // Оновлюємо дані в адаптері
+                    pickDateButton.isEnabled = true
+
+                    if (state.rates.isEmpty()) {
+                        Toast.makeText(this, "Даних за цю дату немає", Toast.LENGTH_LONG).show()
+                    }
+
                     currencyAdapter.submitList(state.rates)
                 }
                 is RatesState.Error -> {
-                    // Помилка
                     progressBar.visibility = View.GONE
                     recyclerView.visibility = View.GONE
                     loadButton.isEnabled = true
-                    // Показуємо помилку
+                    pickDateButton.isEnabled = true
                     Toast.makeText(this, state.message, Toast.LENGTH_LONG).show()
                 }
             }
@@ -81,5 +86,31 @@ class MainActivity : AppCompatActivity() {
         currencyAdapter = CurrencyAdapter()
         recyclerView.adapter = currencyAdapter
         recyclerView.layoutManager = LinearLayoutManager(this)
+    }
+
+    private fun showDatePickerDialog() {
+        val calendar = Calendar.getInstance()
+        val year = calendar.get(Calendar.YEAR)
+        val month = calendar.get(Calendar.MONTH)
+        val day = calendar.get(Calendar.DAY_OF_MONTH)
+
+        val datePickerDialog = DatePickerDialog(
+            this,
+            { _, selectedYear, selectedMonth, selectedDayOfMonth ->
+
+                val dayStr = selectedDayOfMonth.toString().padStart(2, '0')
+                val monthStr = (selectedMonth + 1).toString().padStart(2, '0')
+
+                selectedDateString = "$dayStr.$monthStr.$selectedYear"
+
+                selectedDateText.text = selectedDateString
+            },
+            year,
+            month,
+            day
+        )
+
+        datePickerDialog.datePicker.maxDate = System.currentTimeMillis()
+        datePickerDialog.show()
     }
 }

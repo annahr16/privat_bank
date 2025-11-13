@@ -1,5 +1,4 @@
-package com.example.myapplication // <-- Правильний пакет
-
+package com.example.myapplication
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup

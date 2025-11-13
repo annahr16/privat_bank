@@ -8,13 +8,41 @@
     tools:context=".MainActivity">
 
     <Button
+        android:id="@+id/button_pick_date"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="16dp"
+        android:layout_marginTop="16dp"
+        android:layout_marginEnd="8dp"
+        android:backgroundTint="#D81B60"
+        android:text="Обрати дату"
+        app:layout_constraintEnd_toStartOf="@+id/button_load"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
+
+    <TextView
+        android:id="@+id/tv_selected_date"
+        android:layout_width="0dp"
+        android:layout_height="0dp"
+        android:gravity="center"
+        android:text="Дату не обрано"
+        android:textSize="16sp"
+        app:layout_constraintBottom_toBottomOf="@+id/button_pick_date"
+        app:layout_constraintEnd_toEndOf="@+id/button_load"
+        app:layout_constraintStart_toStartOf="@+id/button_load"
+        app:layout_constraintTop_toTopOf="@+id/button_pick_date" />
+
+    <Button
         android:id="@+id/button_load"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
-        android:layout_margin="16dp"
-        android:text="Завантажити курси"
+        android:layout_marginStart="8dp"
+        android:layout_marginTop="16dp"
+        android:backgroundTint="#D81B60"
+        android:layout_marginEnd="16dp"
+        android:text="Завантажити"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintStart_toEndOf="@+id/button_pick_date"
         app:layout_constraintTop_toTopOf="parent" />
 
     <androidx.recyclerview.widget.RecyclerView
@@ -25,7 +53,7 @@
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/button_load"
+        app:layout_constraintTop_toBottomOf="@+id/button_pick_date"
         tools:listitem="@layout/item_currency" />
 
     <ProgressBar

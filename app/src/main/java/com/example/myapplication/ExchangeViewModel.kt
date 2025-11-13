@@ -6,7 +6,7 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import kotlinx.coroutines.launch
 
-// Ми покладемо цей 'sealed class' прямо тут
+
 sealed class RatesState {
     object Loading : RatesState()
     data class Success(val rates: List<CurrencyRate>) : RatesState()

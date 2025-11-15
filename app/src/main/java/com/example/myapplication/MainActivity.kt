@@ -12,6 +12,8 @@ import androidx.appcompat.app.AppCompatActivity
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import java.util.Calendar
+import android.widget.LinearLayout
+
 
 class MainActivity : AppCompatActivity() {
 
@@ -38,6 +40,9 @@ class MainActivity : AppCompatActivity() {
         selectedDateText = findViewById(R.id.tv_selected_date)
 
         setupRecyclerView()
+
+        // приховуємо рядок заголовків спочатку
+        findViewById<LinearLayout>(R.id.header_row).visibility = View.GONE
 
         pickDateButton.setOnClickListener {
             showDatePickerDialog()
@@ -67,9 +72,13 @@ class MainActivity : AppCompatActivity() {
 
                     if (state.rates.isEmpty()) {
                         Toast.makeText(this, "Даних за цю дату немає", Toast.LENGTH_LONG).show()
+                        // При відсутності даних рядок заголовків не показуємо
+                        findViewById<LinearLayout>(R.id.header_row).visibility = View.GONE
                     }
 
                     currencyAdapter.submitList(state.rates)
+                    // Показуємо заголовки тільки якщо дані успішно завантажено
+                    findViewById<LinearLayout>(R.id.header_row).visibility = View.VISIBLE
                 }
                 is RatesState.Error -> {
                     progressBar.visibility = View.GONE
@@ -104,6 +113,7 @@ class MainActivity : AppCompatActivity() {
                 selectedDateString = "$dayStr.$monthStr.$selectedYear"
 
                 selectedDateText.text = selectedDateString
+
             },
             year,
             month,
